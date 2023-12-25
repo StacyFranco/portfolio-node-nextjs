@@ -2,10 +2,10 @@ import mongoose, {Schema} from 'mongoose';
 
 const ProjectSchema = new Schema({
     userId: {type : String, required : true},
-    badge: {type : String, required : true},
-    lilnk: {type : String, required : true},
-    name: {type : String, required : true},
+    title: {type : String, required : true},
+    figure: {type : String},
     description: {type : String, required : true},
+    link: {type : String, required : true},
 
 });
 
