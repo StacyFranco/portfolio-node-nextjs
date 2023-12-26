@@ -1,11 +1,11 @@
+import nc from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { DefaultAnswerMsg } from '../../types/DefaultAnswer';
+import { policyCORS } from '../../middlewares/policyCORS';
 import { validateTokenJWT } from '../../middlewares/validateTokenJWT';
 import { connectMongoDB } from '../../middlewares/connectMongoDB';
+import type { DefaultAnswerMsg } from '../../types/DefaultAnswer';
 import { UserModel } from '../../models/UserModel';
-import nc from 'next-connect';
 import { upload, uploadImageCosmic } from '../../services/uploadImageCosmic';
-import { policyCORS } from '../../middlewares/policyCORS';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -17,6 +17,7 @@ const handler = nc()
             if (!user) {
                 return res.status(400).json({ error: 'User not found' });
             }
+
             // update avatar
             const { file } = req;
             if (file && file.originalname) {
@@ -26,29 +27,61 @@ const handler = nc()
                 }
 
             }
-            // update itens from user (no lang changes)
+            // update itens from user (no langData changes)
+
             const { name, adress, socialMediaLinks } = req.body
-            console.log("req.body",req.body)
+            console.log("req.body", req.body)
             // validação se tem um alteração de nome com nome valido!
             if (name && name.length > 2) {
                 user.name = name;
             }
             if (adress && adress.length > 2) {
                 user.adress = adress;
-                
+
             }
             if (socialMediaLinks && socialMediaLinks.length > 0) {
                 user.socialMediaLinks = socialMediaLinks;
             }
 
-            // updating itens with lang:
+            // updating itens with langData:
 
-            //lang1:
-            const {country1,expertise1,skills1,resumeURL1} =req.body;
+            const { language, country, resumeURL, expertise, skills, homePage } = req.body;
+            //find if you already have data in this language:
+            const LangId = user.langData.findIndex((langdata: any) => langdata.language === language)
+            const langDataSize = user.langData.length
 
+            // if language already exist update position. if not create new position
+            const DataPosition = LangId >= 0 ? LangId : langDataSize
             
+            if(LangId<0){user.langData.push({})} // creating object to new langData array
+            
+            if (LangId<0 && language && language.length > 1) {
+                
+                user.langData[DataPosition].language = language;
+                
+            }
+
+            if (country && country.length > 2) {
+                user.langData[DataPosition].country = country;
+            }
+            if (resumeURL && resumeURL.length > 2) {
+                user.langData[DataPosition].resumeURL = resumeURL;
+            }
+
+            if (expertise && expertise.length > 0) {
+                user.langData[DataPosition].expertise = expertise;
+            }
+            if (skills && skills.length > 0) {
+                user.langData[DataPosition].skills = skills;
+            }
+
+            if (homePage.title && homePage.title.length > 0) {
+                user.langData[DataPosition].homePage.title = homePage.title;
+            }
+
+
             //console.log("user",user)
-            await UserModel.findByIdAndUpdate({ _id: user._id}, user );
+            await UserModel.findByIdAndUpdate({ _id: user._id }, user);
             return res.status(200).json({ msg: 'user successfully updated' })
 
         } catch (e) {
@@ -68,7 +101,7 @@ const handler = nc()
 
         } catch (e) {
             console.log(e);
-            return res.status(400).json({ erro: 'Unable to obtain user data' });
+            return res.status(400).json({ error: 'Unable to obtain user data' });
         }
 
 
@@ -77,7 +110,7 @@ const handler = nc()
 
 export const config = {
     api: {
-        bodyParser : false
+        bodyParser: false
     }
 }
 

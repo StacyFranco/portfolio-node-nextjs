@@ -8,10 +8,11 @@ const UserSchema = new Schema({
     socialMediaLinks: { type: Array, required: false },
     adress: { type: String, required: false },
    
-    lang1data: {
+    langData: [{
+        language: { type: String, require: false },
         country: { type: String, require: false },
         expertise: { type: [String], require: false },
-        skills: { type: Array, require: false },
+        skills: { type: [String], require: false },
         resumeURL: { type: String, require: false },
         
         homePage:{
@@ -32,7 +33,7 @@ const UserSchema = new Schema({
             buttons:{ type: [String], require: false },
         },
         
-        potfolioPage:{
+        projectsPage:{
             title:{ type: [String], require: false },
             content:{ type: [String], require: false },
             buttons:{ type: [String], require: false },
@@ -43,7 +44,7 @@ const UserSchema = new Schema({
             content:{ type: [String], require: false },
             buttons:{ type: [String], require: false },
         },
-    }
+    }]
     
 
 });
