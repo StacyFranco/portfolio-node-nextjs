@@ -45,7 +45,7 @@ const handler = nc()
 
             // updating itens with langData:
 
-            const { language, country, resumeURL, expertise, skills, homePage } = req.body;
+            const { language, country, expertise, skills, resumeURL, homePage, aboutPage, certificatesPage, projectsPage, contactPage } = req.body;
             //find if you already have data in this language:
             const LangId = user.langData.findIndex((langdata: any) => langdata.language === language)
             const langDataSize = user.langData.length
@@ -55,28 +55,79 @@ const handler = nc()
             
             if(LangId<0){user.langData.push({})} // creating object to new langData array
             
+            // updating user with the new data
             if (LangId<0 && language && language.length > 1) {
-                
                 user.langData[DataPosition].language = language;
-                
             }
-
             if (country && country.length > 2) {
                 user.langData[DataPosition].country = country;
             }
-            if (resumeURL && resumeURL.length > 2) {
-                user.langData[DataPosition].resumeURL = resumeURL;
-            }
-
+            
             if (expertise && expertise.length > 0) {
                 user.langData[DataPosition].expertise = expertise;
             }
             if (skills && skills.length > 0) {
                 user.langData[DataPosition].skills = skills;
             }
+            if (resumeURL && resumeURL.length > 2) {
+                user.langData[DataPosition].resumeURL = resumeURL;
+            }
 
-            if (homePage.title && homePage.title.length > 0) {
+            //pages
+            
+            //HOME
+            if (homePage?.title && homePage.title.length > 0) {
                 user.langData[DataPosition].homePage.title = homePage.title;
+            }
+            if (homePage?.content && homePage.content.length > 0) {
+                user.langData[DataPosition].homePage.content = homePage.content;
+            }
+            if (homePage?.buttons && homePage.buttons.length > 0) {
+                user.langData[DataPosition].homePage.buttons = homePage.buttons;
+            }
+          
+            //ABOUT
+            if (aboutPage?.title && aboutPage.title.length > 0) {
+                user.langData[DataPosition].aboutPage.title = aboutPage.title;
+            }
+            if (aboutPage?.content && aboutPage.content.length > 0) {
+                user.langData[DataPosition].aboutPage.content = aboutPage.content;
+            }
+            if (aboutPage?.buttons && aboutPage.buttons.length > 0) {
+                user.langData[DataPosition].aboutPage.buttons = aboutPage.buttons;
+            }
+          
+            //CERTIFICATES
+            if (certificatesPage?.title && certificatesPage.title.length > 0) {
+                user.langData[DataPosition].certificatesPage.title = certificatesPage.title;
+            }
+            if (certificatesPage?.content && certificatesPage.content.length > 0) {
+                user.langData[DataPosition].certificatesPage.content = certificatesPage.content;
+            }
+            if (certificatesPage?.buttons && certificatesPage.buttons.length > 0) {
+                user.langData[DataPosition].certificatesPage.buttons = certificatesPage.buttons;
+            }
+          
+            //PROJECTS
+            if (projectsPage?.title && projectsPage.title.length > 0) {
+                user.langData[DataPosition].projectsPage.title = projectsPage.title;
+            }
+            if (projectsPage?.content && projectsPage.content.length > 0) {
+                user.langData[DataPosition].projectsPage.content = projectsPage.content;
+            }
+            if (projectsPage?.buttons && projectsPage.buttons.length > 0) {
+                user.langData[DataPosition].projectsPage.buttons = projectsPage.buttons;
+            }
+          
+            //CONTACT
+            if (contactPage?.title && contactPage.title.length > 0) {
+                user.langData[DataPosition].contactPage.title = contactPage.title;
+            }
+            if (contactPage?.content && contactPage.content.length > 0) {
+                user.langData[DataPosition].contactPage.content = contactPage.content;
+            }
+            if (contactPage?.buttons && contactPage.buttons.length > 0) {
+                user.langData[DataPosition].contactPage.buttons = contactPage.buttons;
             }
 
 
